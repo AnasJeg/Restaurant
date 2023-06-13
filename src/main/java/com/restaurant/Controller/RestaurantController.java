@@ -2,9 +2,11 @@ package com.restaurant.Controller;
 
 import com.restaurant.Repository.RestaurantRepository;
 import com.restaurant.Repository.SpecialiteRepository;
+import com.restaurant.Repository.VilleRepository;
 import com.restaurant.Repository.ZoneRepository;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.Specialite;
+import com.restaurant.entity.Ville;
 import com.restaurant.entity.Zone;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +17,46 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class RestaurantController {
     @Autowired
     private RestaurantRepository restaurantRepository;
     @Autowired
     private ZoneRepository zoneRepository;
-
     @Autowired
     private SpecialiteRepository specialiteRepository;
+    @Autowired
+    private VilleRepository villeRepository;
 
     @GetMapping("/zone/all")
     public List<Zone> findALlZones(){
         return zoneRepository.findAll();
     }
 
+    @GetMapping("/ville/all")
+    public List<Ville> findAllVilee(){
+        return villeRepository.findAll();
+    }
+
+    @GetMapping("/byville")
+    public List<Zone> findByZoneville(@PathParam(value = "nom") String nom){
+        return zoneRepository.findZonesByVille(nom);
+    }
+    @GetMapping("/sp/all")
+    public List<Specialite> findAll(){
+        return specialiteRepository.findAll();
+    }
+
     @GetMapping("/restaurant/all")
     public List<Restaurant> findALlRestaurant(){
         return restaurantRepository.findAll();
     }
+
+    @GetMapping("/rest")
+    public List<Restaurant> getRestByVilleZone(@PathParam(value = "ville")String ville, @PathParam(value="zone")String zone){
+        return restaurantRepository.findByVilleZone(ville,zone);
+    }
+
     @PostMapping("/zone")
     public ResponseEntity<Zone> addZone(@RequestBody Zone zone) {
         try {
@@ -100,8 +124,5 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(listRest); //200
     }
 
-    @GetMapping("/sp/all")
-    public List<Specialite> findAll(){
-        return specialiteRepository.findAll();
-    }
+
 }

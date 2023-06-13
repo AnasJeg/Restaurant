@@ -1,6 +1,7 @@
 package com.restaurant.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,11 +33,10 @@ public class Restaurant {
     @ManyToOne
     private Zone zone;
     @OneToMany(mappedBy = "restaurant",fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<Repas> repas;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @JsonIgnoreProperties("restaurants")
     private List<Specialite> specialites;
 
 }
